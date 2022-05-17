@@ -12,17 +12,63 @@ import {
 } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { Fragment } from 'react'
+import {
+  Navigate,
+  useMatch,
+  useNavigate,
+  useResolvedPath
+} from 'react-router-dom'
+import { useAppDrawerContext } from '../../context'
 
 interface IChildren {
   children: React.ReactNode
 }
 
+interface ILinkItemButton {
+  to: string
+  icon: string
+  label: string
+  onClick: (() => void) | undefined
+}
+
+const LinkItemButton: React.FC<ILinkItemButton> = ({
+  to,
+  icon,
+  label,
+  onClick
+}) => {
+  const navigate = useNavigate()
+  const resolvedPath = useResolvedPath(to)
+  const match = useMatch({ path: resolvedPath.pathname, end: false })
+
+  const handleClick = () => {
+    navigate(to)
+    onClick?.()
+  }
+
+  return (
+    <ListItemButton selected={!!match} onClick={handleClick}>
+      <ListItemIcon>
+        <Icon>{icon}</Icon>
+        <ListItemText secondary={label} />
+      </ListItemIcon>
+    </ListItemButton>
+  )
+}
+
 export const MenuLateral: React.FC<IChildren> = ({ children }) => {
   const theme = useTheme()
   const smDown = useMediaQuery(theme.breakpoints.down('sm'))
+
+  const { isDrawerOpen, toggleDrawerOpen } = useAppDrawerContext()
+
   return (
     <Fragment>
-      <Drawer variant={smDown ? 'temporary' : 'permanent'}>
+      <Drawer
+        open={isDrawerOpen}
+        variant={smDown ? 'temporary' : 'permanent'}
+        onClose={toggleDrawerOpen}
+      >
         <Box
           width={theme.spacing(28)}
           display="flex"
@@ -44,30 +90,36 @@ export const MenuLateral: React.FC<IChildren> = ({ children }) => {
           <Divider />
           <Box flex={1}>
             <List component="nav" color="#ffffff">
-              <ListItemButton>
-                <ListItemIcon>
-                  <Icon>home</Icon>
-                  <ListItemText secondary="Página Inicial" />
-                </ListItemIcon>
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemIcon>
-                  <Icon>personIcon</Icon>
-                  <ListItemText secondary="Cadastro" />
-                </ListItemIcon>
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemIcon>
-                  <Icon>addBoxIcon</Icon>
-                  <ListItemText secondary="Produtos" />
-                </ListItemIcon>
-              </ListItemButton>
-              <ListItemButton>
-                <ListItemIcon>
-                  <Icon>analyticsIcon</Icon>
-                  <ListItemText secondary="Estatísticas" />
-                </ListItemIcon>
-              </ListItemButton>
+              <LinkItemButton
+                to="/login"
+                onClick={smDown ? toggleDrawerOpen : undefined}
+                label="Página Inicial"
+                icon="home"
+              ></LinkItemButton>
+              <LinkItemButton
+                to="/register"
+                onClick={smDown ? toggleDrawerOpen : undefined}
+                label="Cadastro"
+                icon="personIcon"
+              ></LinkItemButton>
+              <LinkItemButton
+                to="/products"
+                onClick={smDown ? toggleDrawerOpen : undefined}
+                label="Produtos"
+                icon="inventoryIcon"
+              ></LinkItemButton>
+              <LinkItemButton
+                to="/ad"
+                onClick={smDown ? toggleDrawerOpen : undefined}
+                label="Anúncios"
+                icon="moneyIcon"
+              ></LinkItemButton>
+              <LinkItemButton
+                to="/statistics"
+                onClick={smDown ? toggleDrawerOpen : undefined}
+                label="Estatisticas"
+                icon="analyticsIcon"
+              ></LinkItemButton>
             </List>
           </Box>
         </Box>

@@ -14,7 +14,7 @@ interface IThemeContextData {
   toggleTheme: () => void
 }
 
-export interface IThemeContextProps {
+interface IThemeContextProps {
   children: React.ReactNode
 }
 
