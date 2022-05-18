@@ -12,13 +12,8 @@ import {
 } from '@mui/material'
 import { Box } from '@mui/system'
 import React, { Fragment } from 'react'
-import {
-  Navigate,
-  useMatch,
-  useNavigate,
-  useResolvedPath
-} from 'react-router-dom'
-import { useAppDrawerContext } from '../../context'
+import { useMatch, useNavigate, useResolvedPath } from 'react-router-dom'
+import { useAppDrawerContext, useAppThemeContext } from '../../context'
 
 interface IChildren {
   children: React.ReactNode
@@ -50,8 +45,8 @@ const LinkItemButton: React.FC<ILinkItemButton> = ({
     <ListItemButton selected={!!match} onClick={handleClick}>
       <ListItemIcon>
         <Icon>{icon}</Icon>
-        <ListItemText secondary={label} />
       </ListItemIcon>
+      <ListItemText secondary={label} />
     </ListItemButton>
   )
 }
@@ -59,8 +54,10 @@ const LinkItemButton: React.FC<ILinkItemButton> = ({
 export const MenuLateral: React.FC<IChildren> = ({ children }) => {
   const theme = useTheme()
   const smDown = useMediaQuery(theme.breakpoints.down('sm'))
+  const { toggleTheme } = useAppThemeContext()
 
-  const { isDrawerOpen, toggleDrawerOpen } = useAppDrawerContext()
+  const { isDrawerOpen, toggleDrawerOpen, drawerOptions } =
+    useAppDrawerContext()
 
   return (
     <Fragment>
@@ -89,37 +86,26 @@ export const MenuLateral: React.FC<IChildren> = ({ children }) => {
           </Box>
           <Divider />
           <Box flex={1}>
-            <List component="nav" color="#ffffff">
-              <LinkItemButton
-                to="/login"
-                onClick={smDown ? toggleDrawerOpen : undefined}
-                label="Página Inicial"
-                icon="home"
-              ></LinkItemButton>
-              <LinkItemButton
-                to="/register"
-                onClick={smDown ? toggleDrawerOpen : undefined}
-                label="Cadastro"
-                icon="personIcon"
-              ></LinkItemButton>
-              <LinkItemButton
-                to="/products"
-                onClick={smDown ? toggleDrawerOpen : undefined}
-                label="Produtos"
-                icon="inventoryIcon"
-              ></LinkItemButton>
-              <LinkItemButton
-                to="/ad"
-                onClick={smDown ? toggleDrawerOpen : undefined}
-                label="Anúncios"
-                icon="moneyIcon"
-              ></LinkItemButton>
-              <LinkItemButton
-                to="/statistics"
-                onClick={smDown ? toggleDrawerOpen : undefined}
-                label="Estatisticas"
-                icon="analyticsIcon"
-              ></LinkItemButton>
+            <List component="nav">
+              {drawerOptions.map(drawerOption => (
+                <LinkItemButton
+                  key={drawerOption.path}
+                  to={drawerOption.path}
+                  onClick={smDown ? toggleDrawerOpen : undefined}
+                  label={drawerOption.label}
+                  icon={drawerOption.icon}
+                />
+              ))}
+            </List>
+          </Box>
+          <Box>
+            <List component="nav">
+              <ListItemButton onClick={toggleTheme}>
+                <ListItemIcon>
+                  <Icon> dark_mode_icon </Icon>
+                </ListItemIcon>
+                <ListItemText secondary="Alternar Tema" />
+              </ListItemButton>
             </List>
           </Box>
         </Box>
