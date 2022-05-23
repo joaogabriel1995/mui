@@ -1,11 +1,9 @@
-import { prisma } from '@prisma/client'
 import { Request, Response } from 'express'
 import { prismaClient } from '../../database/prismaClient'
 
 export class DeleteUserController {
   async handle(request: Request, response: Response) {
-    const { id } = request.params
-    const intId = parseInt(id)
+    const intId = parseInt(request.params.id)
     const userExist = await prismaClient.user.findUnique({
       where: { id: intId }
     })

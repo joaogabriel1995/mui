@@ -1,1 +1,1 @@
-export * from './cadastro/Cadastro'
+export * from './usuarios/Usuarios'

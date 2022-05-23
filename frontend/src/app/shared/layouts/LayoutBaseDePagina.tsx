@@ -12,13 +12,15 @@ import { useAppDrawerContext } from '../context/DrawerContext'
 interface ILayoutBaseDePagina {
   children?: React.ReactNode
   titulo: string
-  barraDeFerramentas: React.ReactNode | undefined
+  ferramentaDeListagem?: React.ReactNode | undefined
+  ferramentaDeDetalhes?: React.ReactNode | undefined
 }
 
 export const LayoutBaseDePagina: React.FC<ILayoutBaseDePagina> = ({
   children,
   titulo,
-  barraDeFerramentas
+  ferramentaDeListagem,
+  ferramentaDeDetalhes
 }) => {
   const { toggleDrawerOpen } = useAppDrawerContext()
   const theme = useTheme()
@@ -48,7 +50,9 @@ export const LayoutBaseDePagina: React.FC<ILayoutBaseDePagina> = ({
           {titulo}
         </Typography>
       </Box>
-      {barraDeFerramentas && <Box>{barraDeFerramentas}</Box>}
+      {ferramentaDeListagem && <Box>{ferramentaDeListagem}</Box>}
+      {ferramentaDeDetalhes && <Box>{ferramentaDeDetalhes}</Box>}
+
       <Box flex={1} overflow="auto">
         {children}
       </Box>

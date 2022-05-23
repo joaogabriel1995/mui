@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
-import { Cadastro } from '../pages'
+import { Usuarios } from '../pages'
 import { useAppDrawerContext } from '../shared/context'
 
 export const AppRoutes = () => {
@@ -13,8 +13,8 @@ export const AppRoutes = () => {
         path: '/home'
       },
       {
-        path: '/register',
-        label: 'Cadastro',
+        path: '/user',
+        label: 'Usuários',
         icon: 'personIcon'
       },
       {
@@ -37,7 +37,7 @@ export const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/home" />
-      <Route path="/register" element={<Cadastro />} />
+      <Route path="/user" element={<Usuarios />} />
       <Route path="/products" />
       <Route path="/ad" />
       <Route path="/statistics" />
