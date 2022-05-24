@@ -1,6 +1,6 @@
 import { Api } from '../axios-config'
 
-interface IListUser {
+export interface IListUser {
   id: number
   name: string
   email: string
@@ -14,7 +14,8 @@ const getAll = async (
   filter = 'undefined'
 ): Promise<TUsertowithtotalcount | Error> => {
   try {
-    const { data } = await Api.get(`/user?name=${filter}`)
+    const urlRelative = `/user?name=${filter}`
+    const { data } = await Api.get(urlRelative)
     if (data) {
       return {
         data
