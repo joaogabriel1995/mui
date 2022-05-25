@@ -3,15 +3,13 @@ import {
   CreateUserController,
   DeleteUserController,
   FindManyUserController,
-  UpdateUserController,
-  FindUserByNameController
+  UpdateUserController
 } from '../controllers'
 
 const createUserController = new CreateUserController()
 const findManyUserController = new FindManyUserController()
 const updateUserController = new UpdateUserController()
 const deleteUserController = new DeleteUserController()
-const findUserByNameController = new FindUserByNameController()
 
 const appRouter = Router()
 appRouter.post('/user', createUserController.handle)

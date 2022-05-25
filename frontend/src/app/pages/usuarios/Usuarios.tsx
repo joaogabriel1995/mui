@@ -1,14 +1,3 @@
-import {
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
-} from '@mui/material'
-import { display, useTheme } from '@mui/system'
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
@@ -18,13 +7,14 @@ import {
 import { useDeBounce } from '../../shared/hooks'
 import { LayoutBaseDePagina } from '../../shared/layouts'
 import { IListUser, UserService } from '../../shared/services/api'
+import { TableListagem } from './components/TableListagem'
 
 export const Usuarios = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const { debounce } = useDeBounce()
-  const theme = useTheme()
 
   const [rows, setRows] = useState<IListUser[]>([])
+  const columns_name = ['Ação', 'Nome', 'Email', 'CPF']
 
   const busca = useMemo(() => {
     return searchParams.get('name') || ''
@@ -40,7 +30,7 @@ export const Usuarios = () => {
         console.log(result)
       })
     })
-  }, [busca])
+  }, [debounce, busca])
 
   return (
     <LayoutBaseDePagina
@@ -56,32 +46,7 @@ export const Usuarios = () => {
         ></FerramentasDelistagem>
       }
     >
-      <TableContainer
-        component={Paper}
-        variant="outlined"
-        sx={{ margin: 1, width: 'auto' }}
-      >
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Ações</TableCell>
-              <TableCell>Nome Completo</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>CPF</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow>
-                <TableCell>Teste</TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>{row.cpf}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <TableListagem columnsName={columns_name} data={rows}></TableListagem>
     </LayoutBaseDePagina>
   )
 }
