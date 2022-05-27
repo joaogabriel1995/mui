@@ -52,7 +52,7 @@ model Ad {
 }
 
 model Sale {
-  requestNumber String   @id
+  requestNumber String   @id @default(uuid())
   amount        Float
   date          DateTime
   sales         Ad       @relation(fields: [adId], references: [id])

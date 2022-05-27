@@ -7,14 +7,14 @@ import {
 import { useDeBounce } from '../../shared/hooks'
 import { LayoutBaseDePagina } from '../../shared/layouts'
 import { IListUser, UserService } from '../../shared/services/api'
-import { TableListagem } from './components/TableListagem'
+import { TableListagemUsers } from './components/TableListUsers'
 
 export const Usuarios = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const { debounce } = useDeBounce()
 
   const [rows, setRows] = useState<IListUser[]>([])
-  const columns_name = ['Ação', 'Nome', 'Email', 'CPF']
+  const columns_name = ['Id', 'Nome', 'Email', 'CPF']
 
   const busca = useMemo(() => {
     return searchParams.get('name') || ''
@@ -46,7 +46,10 @@ export const Usuarios = () => {
         ></FerramentasDelistagem>
       }
     >
-      <TableListagem columnsName={columns_name} data={rows}></TableListagem>
+      <TableListagemUsers
+        columnsName={columns_name}
+        data={rows}
+      ></TableListagemUsers>
     </LayoutBaseDePagina>
   )
 }

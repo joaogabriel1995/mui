@@ -15,7 +15,7 @@ interface ITableListagem {
   data: IListUser[]
 }
 
-export const TableListagem: React.FC<ITableListagem> = ({
+export const TableListagemUsers: React.FC<ITableListagem> = ({
   columnsName,
   data
 }) => {
