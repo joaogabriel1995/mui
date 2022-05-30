@@ -10,6 +10,7 @@ networks:
 services:
 
   backend: 
+    container_name: backend
     build: 
       context: ./backend
       dockerfile: Dockerfile
@@ -27,6 +28,7 @@ services:
       - postgres
     
   frontend: 
+    container_name: frontend
     build: 
       context: ./frontend
       dockerfile: Dockerfile

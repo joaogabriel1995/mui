@@ -1,7 +1,6 @@
-import { Router } from 'express'
+import { response, Router } from 'express'
 import app from '../app'
 import {
-  CreateUserController,
   DeleteUserController,
   FindManyUserController,
   UpdateUserController,
@@ -11,7 +10,11 @@ import {
   UpdateProductController
 } from '../controllers'
 
-const createUserController = new CreateUserController()
+import { createUserController } from '../useCases/CreateUser/index'
+import { authenticateUserController } from '../useCases/authenticateUser/index'
+import { ensureAuthenticated } from '../middlewares/ensureAuthenticated'
+import { refreshTokenUserControler } from '../useCases/refreshTokenUser'
+
 const findManyUserController = new FindManyUserController()
 const updateUserController = new UpdateUserController()
 const deleteUserController = new DeleteUserController()
@@ -22,8 +25,18 @@ const deleteProductController = new DeleteProductController()
 const updateProductController = new UpdateProductController()
 
 const appRouter = Router()
-appRouter.post('/user', createUserController.handle)
-appRouter.get('/user', findManyUserController.handle)
+appRouter.post('/user', (request, response) => {
+  createUserController.handle(request, response)
+})
+appRouter.post('/login', (request, response) => {
+  authenticateUserController.handle(request, response)
+})
+
+appRouter.post('/refresh-token', (request, response) => {
+  refreshTokenUserControler.handle(request, response)
+})
+
+appRouter.get('/user', ensureAuthenticated, findManyUserController.handle)
 appRouter.put('/user', updateUserController.handle)
 appRouter.delete('/user/del=:id', deleteUserController.handle)
 

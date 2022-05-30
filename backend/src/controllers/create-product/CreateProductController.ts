@@ -1,15 +1,15 @@
-import { prismaClient } from '../../database/prismaClient'
+import { prisma } from '../../prisma/client'
 import { Request, Response } from 'express'
 
 export class CreateProductController {
   async handle(request: Request, response: Response) {
-    const { name, costPrice, imposto, sku, userId } = request.body
+    const { name, costPrice, taxation, sku, userId } = request.body
 
-    const product = await prismaClient.product.create({
+    const product = await prisma.product.create({
       data: {
         name,
         costPrice,
-        imposto,
+        taxation,
         sku,
         userId
       }

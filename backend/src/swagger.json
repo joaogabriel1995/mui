@@ -1,0 +1,85 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API finance",
+        "description": "Essa API tem como objetivo mapear os endPoints da API que é utilizada na aplic ",
+        "contact": {
+            "email": "joaogabrielrp@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3333/",
+            "description": "Api aplicação finance"
+        }
+    ],
+    "paths": {
+        "product": {
+            "post": {
+                "summary": "Cadastro de Produtos",
+                "description": "Essa rota será responsável por cadastro de um novo produto",
+                "tags": [
+                    "Products"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Product"
+                            },
+                            "examples": {
+                                "product": {
+                                    "value": {
+                                        "name": "Computador",
+                                        "costPrice": 3000,
+                                        "imposto": 20,
+                                        "sku": "asdhU@sd2482",
+                                        "userID": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Product": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "costPrice": {
+                        "type": "number"
+                    },
+                    "imposto": {
+                        "type": "number"
+                    },
+                    "sku": {
+                        "type": "string"
+                    },
+                    "userId": {
+                        "type": "number"
+                    }
+                }
+            }
+        }
+    }
+}

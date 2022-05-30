@@ -11,7 +11,7 @@ import { useAppDrawerContext } from '../context/DrawerContext'
 
 interface ILayoutBaseDePagina {
   children?: React.ReactNode
-  titulo: string
+  titulo?: string
   ferramentaDeListagem?: React.ReactNode | undefined
   ferramentaDeDetalhes?: React.ReactNode | undefined
 }

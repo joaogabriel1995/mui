@@ -1,5 +1,5 @@
 import { Response, Request } from 'express'
-import { prismaClient } from '../../database/prismaClient'
+import { prisma } from '../../prisma/client'
 
 interface IFindManyUserController {
   query?: string | undefined
@@ -10,12 +10,12 @@ export class FindManyUserController<IFindManyUserController> {
     const query = String(request.query.name)
     console.log(String(query))
     if (query !== 'undefined') {
-      const read = await prismaClient.user.findMany({
+      const read = await prisma.user.findMany({
         where: { name: { contains: query } }
       })
       return response.json(read)
     } else {
-      const read = await prismaClient.user.findMany()
+      const read = await prisma.user.findMany()
       return response.json(read)
     }
   }

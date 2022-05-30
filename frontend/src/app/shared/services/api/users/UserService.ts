@@ -10,9 +10,7 @@ type TUsertowithtotalcount = {
   data: IListUser[]
 }
 
-const getAll = async (
-  filter = 'undefined'
-): Promise<TUsertowithtotalcount | Error> => {
+const getAll = async (filter = ''): Promise<TUsertowithtotalcount | Error> => {
   try {
     const urlRelative = `/user?name=${filter}`
     const { data } = await Api.get(urlRelative)

@@ -15,22 +15,27 @@ export const Usuarios = () => {
 
   const [rows, setRows] = useState<IListUser[]>([])
   const columns_name = ['Id', 'Nome', 'Email', 'CPF']
-
+  const [isLoading, setIsLoading] = useState(true)
   const busca = useMemo(() => {
     return searchParams.get('name') || ''
   }, [searchParams])
   useEffect(() => {
     debounce(() => {
       UserService.getAll(busca).then(result => {
+        setIsLoading(true)
         if (result instanceof Error) {
           alert(result.message)
+          setIsLoading(false)
           return
+        } else {
+          console.log(busca)
+          setIsLoading(false)
+          setRows(result.data)
+          console.log(result)
         }
-        setRows(result.data)
-        console.log(result)
       })
     })
-  }, [debounce, busca])
+  }, [busca, debounce])
 
   return (
     <LayoutBaseDePagina
@@ -49,6 +54,7 @@ export const Usuarios = () => {
       <TableListagemUsers
         columnsName={columns_name}
         data={rows}
+        Loading={isLoading}
       ></TableListagemUsers>
     </LayoutBaseDePagina>
   )

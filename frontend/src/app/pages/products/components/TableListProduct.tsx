@@ -7,7 +7,7 @@ import {
   TableHead,
   TableRow
 } from '@mui/material'
-import { Fragment, useMemo } from 'react'
+import { Fragment } from 'react'
 import { IListProduct } from '../../../shared/services/api'
 
 interface ITableListagem {
