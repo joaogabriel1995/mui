@@ -8,15 +8,25 @@ import {
   InputLabel,
   OutlinedInput,
   Stack,
-  Item,
-  Typography,
-  Divider
+  Typography
 } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { teal } from '@mui/material/colors'
+import { useCallback, useState } from 'react'
+import { AuthService } from '../../shared/services/api/index'
 
 export const AuthPage = () => {
   const theme = useTheme()
+
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+
+  const handleSignup = useCallback(async () => {
+    const data = await AuthService.auth(email, password)
+    console.log(email)
+    console.log(password)
+    console.log(data)
+  }, [email, password])
+
   return (
     <ThemeProvider theme={LightTheme}>
       <Box
@@ -59,11 +69,20 @@ export const AuthPage = () => {
               <Stack display="flex" justifyContent="center" spacing={5}>
                 <FormControl fullWidth sx={{ width: theme.spacing(44) }}>
                   <InputLabel variant="outlined"> Email </InputLabel>
-                  <OutlinedInput label="Email"></OutlinedInput>
+                  <OutlinedInput
+                    label="Email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                  ></OutlinedInput>
                 </FormControl>
                 <FormControl fullWidth sx={{ width: theme.spacing(44) }}>
                   <InputLabel variant="outlined"> Senha </InputLabel>
-                  <OutlinedInput label="Senha" type="password"></OutlinedInput>
+                  <OutlinedInput
+                    label="Senha"
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                  ></OutlinedInput>
                 </FormControl>
               </Stack>
             </Box>
@@ -74,6 +93,8 @@ export const AuthPage = () => {
                     variant="contained"
                     size="large"
                     sx={{ bgcolor: '#3f50b5' }}
+                    type="button"
+                    onClick={handleSignup}
                   >
                     Entrar
                   </Button>

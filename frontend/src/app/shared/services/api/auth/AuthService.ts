@@ -2,6 +2,7 @@ import { Api } from '../axios-config'
 
 interface IAuth {
   acessToken: string
+  refreshToken: string
 }
 
 const auth = async (
@@ -9,9 +10,9 @@ const auth = async (
   password: string
 ): Promise<IAuth | Error> => {
   try {
-    const { data } = await Api.post('/products', { data: { email, password } })
+    const { data } = await Api.post('/login', { email, password })
     if (data) {
-      return data
+      return data.acessToken, data
     }
     return new Error('Error no Login')
   } catch (error) {
