@@ -8,9 +8,7 @@ export const App = () => {
     <AppThemeContext>
       <DrawerProvider>
         <BrowserRouter>
-          <MenuLateral>
-            <AppRoutes />
-          </MenuLateral>
+          <AppRoutes />
         </BrowserRouter>
       </DrawerProvider>
     </AppThemeContext>

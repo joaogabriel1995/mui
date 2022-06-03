@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router'
 import { Usuarios, Products, AuthPage } from '../pages'
 import { useAppDrawerContext } from '../shared/context'
 
+
 export const AppRoutes = () => {
   const { setDrawerOptions } = useAppDrawerContext()
   useEffect(() => {
