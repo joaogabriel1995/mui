@@ -7,8 +7,10 @@ export function ensureAuthenticated(
   next: NextFunction
 ) {
   const authToken = request.headers.authorization
+  console.log('Aqui ', authToken)
 
   if (!authToken) {
+    console.log('Aqui  !authToken', authToken)
     return response.status(401).json({
       message: 'Token in missing'
     })

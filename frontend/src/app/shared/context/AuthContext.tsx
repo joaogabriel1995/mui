@@ -1,4 +1,11 @@
-import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import { AuthService } from '../services/api/index'
 
 interface IAuthContextData {
@@ -14,9 +21,13 @@ const AuthContext = createContext<IAuthContextData>({} as IAuthContextData)
 
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
   const [acessToken, setAcessToken] = useState<string | undefined>()
+  const [refreshToken, setRefreshToken] = useState<string | undefined>()
 
   useEffect(() => {
     const acessToken = localStorage.getItem('APP_ACCESS_TOKEN')
+
+    console.log('useEffect', acessToken)
+
     if (acessToken) {
       setAcessToken(JSON.parse(acessToken))
     } else {
@@ -24,22 +35,22 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     }
   }, [])
 
-  const handleLogin = useCallback(
-    async (email: string, password: string) => {
-      const result = await AuthService.auth(email, password)
-      if (result instanceof Error) {
-        return result.message
-      } else {
-        
-        localStorage.setItem(
-          'APP_ACCESS_TOKEN',
-          JSON.stringify(result.acessToken)
-        )
-        setAcessToken(result.acessToken)
-      }
-    },
-    [acessToken]
-  )
+  const handleLogin = useCallback(async (email: string, password: string) => {
+    const result = await AuthService.auth(email, password)
+    if (result instanceof Error) {
+      return result.message
+    } else {
+      console.log('APP_ACCESS_TOKEN ', result.acessToken)
+      localStorage.setItem(
+        'APP_ACCESS_TOKEN',
+        JSON.stringify(result.acessToken)
+      )
+      localStorage.setItem('REFRESH_TOKEN', JSON.stringify(result.refreshToken))
+
+      setAcessToken(result.acessToken)
+      setRefreshToken(result.refreshToken)
+    }
+  }, [])
   const handleLogout = useCallback(() => {
     localStorage.removeItem('APP_ACCESS_TOKEN')
     setAcessToken(undefined)
@@ -55,3 +66,5 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     </AuthContext.Provider>
   )
 }
+
+export const useAuthContext = () => useContext(AuthContext)

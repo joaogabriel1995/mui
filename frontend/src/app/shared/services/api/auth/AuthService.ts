@@ -1,6 +1,6 @@
 import { Api } from '../axios-config'
 
-interface IAuth {
+export interface IAuth {
   acessToken: string
   refreshToken: string
 }
@@ -12,7 +12,7 @@ const auth = async (
   try {
     const { data } = await Api.post('/login', { email, password })
     if (data) {
-      return data.acessToken, data
+      return { acessToken: data.token, refreshToken: data.refreshToken }
     }
     return new Error('Error no Login')
   } catch (error) {
@@ -20,6 +20,7 @@ const auth = async (
     return new Error((error as { message: string }).message || 'Error no Login')
   }
 }
+
 export const AuthService = {
   auth
 }

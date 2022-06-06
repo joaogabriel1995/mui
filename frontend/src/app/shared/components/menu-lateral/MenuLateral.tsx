@@ -13,7 +13,11 @@ import {
 import { Box } from '@mui/system'
 import React, { Fragment } from 'react'
 import { useMatch, useNavigate, useResolvedPath } from 'react-router-dom'
-import { useAppDrawerContext, useAppThemeContext } from '../../context'
+import {
+  useAppDrawerContext,
+  useAppThemeContext,
+  useAuthContext
+} from '../../context'
 
 interface IChildren {
   children: React.ReactNode
@@ -55,6 +59,7 @@ export const MenuLateral: React.FC<IChildren> = ({ children }) => {
   const theme = useTheme()
   const smDown = useMediaQuery(theme.breakpoints.down('sm'))
   const { toggleTheme } = useAppThemeContext()
+  const { logout } = useAuthContext()
 
   const { isDrawerOpen, toggleDrawerOpen, drawerOptions } =
     useAppDrawerContext()
@@ -105,6 +110,12 @@ export const MenuLateral: React.FC<IChildren> = ({ children }) => {
                   <Icon> dark_mode_icon </Icon>
                 </ListItemIcon>
                 <ListItemText secondary="Alternar Tema" />
+              </ListItemButton>
+              <ListItemButton onClick={logout}>
+                <ListItemIcon>
+                  <Icon> logout_icon </Icon>
+                </ListItemIcon>
+                <ListItemText secondary="Sair" />
               </ListItemButton>
             </List>
           </Box>

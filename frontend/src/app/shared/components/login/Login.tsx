@@ -1,34 +1,61 @@
-import { bgcolor, Box, margin, ThemeProvider, useTheme } from '@mui/system'
-import { LightTheme } from '../../shared/themes/index'
+import { Box, useTheme } from '@mui/system'
+import * as yup from 'yup'
 import {
   Button,
   Card,
   FormControl,
+  FormHelperText,
   Grid,
   InputLabel,
   OutlinedInput,
   Stack,
   Typography
 } from '@mui/material'
-import { Link } from 'react-router-dom'
 import { useCallback, useState } from 'react'
-import { AuthService } from '../../shared/services/api/index'
+import { AuthService } from '../../services/api/index'
+import { useAuthContext } from '../../context'
 
-export const AuthPage = () => {
-  const theme = useTheme()
+interface ILoginProps {
+  children: React.ReactNode
+}
 
+const loginSchema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup.string().required().min(5)
+})
+
+export const Login: React.FC<ILoginProps> = ({ children }) => {
+  const { isAuthenticated, login } = useAuthContext()
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [emailError, setEmailError] = useState<string>('')
+  const [passwordError, setPasswordError] = useState<string>('')
+
+  const theme = useTheme()
 
   const handleSignup = useCallback(async () => {
+    loginSchema
+      .validate({ email, password }, { abortEarly: false })
+      .then(validatedData => {
+        login(validatedData.email, validatedData.password)
+      })
+      .catch((errors: yup.ValidationError) => {
+        errors.inner.forEach(error => {
+          if (error.path === 'email') {
+            setEmailError(error.message)
+          } else if (error.path === 'password') {
+            setPasswordError(error.message)
+          }
+        })
+      })
+
     const data = await AuthService.auth(email, password)
-    console.log(email)
-    console.log(password)
-    console.log(data)
   }, [email, password])
 
-  return (
-    <ThemeProvider theme={LightTheme}>
+  if (isAuthenticated) {
+    return <>{children}</>
+  } else {
+    return (
       <Box
         display="flex"
         justifyContent="center"
@@ -71,24 +98,31 @@ export const AuthPage = () => {
                   <InputLabel variant="outlined"> Email </InputLabel>
                   <OutlinedInput
                     label="Email"
+                    type="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
+                    onKeyDown={e => setEmailError(' ')}
+                    error={!!emailError}
                   ></OutlinedInput>
+                  <FormHelperText>{emailError}</FormHelperText>
                 </FormControl>
                 <FormControl fullWidth sx={{ width: theme.spacing(44) }}>
                   <InputLabel variant="outlined"> Senha </InputLabel>
                   <OutlinedInput
-                    label="Senha"
+                    label="Password"
                     type="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
+                    onKeyDown={e => setPasswordError(' ')}
+                    error={!!passwordError}
                   ></OutlinedInput>
+                  <FormHelperText>{passwordError}</FormHelperText>
                 </FormControl>
               </Stack>
             </Box>
             <Box display="flex" alignItems="center">
               <Grid container rowSpacing={1} columnSpacing={{ xs: 1 }}>
-                <Grid container xs={12} justifyContent="center" margin={2}>
+                <Grid container justifyContent="center" margin={2}>
                   <Button
                     variant="contained"
                     size="large"
@@ -99,14 +133,14 @@ export const AuthPage = () => {
                     Entrar
                   </Button>
                 </Grid>
-                <Grid container xs={12} justifyContent="center">
-                  <Link to="/home"> Esqueci minha senha </Link>
+                <Grid container justifyContent="center">
+                  <a href="/users">Casdastrar</a>
                 </Grid>
               </Grid>
             </Box>
           </Stack>
         </Card>
       </Box>
-    </ThemeProvider>
-  )
+    )
+  }
 }

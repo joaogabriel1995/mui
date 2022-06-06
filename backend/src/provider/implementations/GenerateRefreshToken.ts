@@ -8,7 +8,7 @@ class GenerateRefreshToken {
     this.generateTokenProvider = generateTokenProvider
   }
   async execute(userId: string) {
-    const expiresIn = dayjs().add(15, 'second').unix()
+    const expiresIn = dayjs().add(15, 'days').unix()
 
     const refreshToken = await prisma.refreshToken.create({
       data: {

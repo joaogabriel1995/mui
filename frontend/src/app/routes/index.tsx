@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
-import { Usuarios, Products, AuthPage } from '../pages'
+import { Usuarios, Products } from '../pages'
 import { useAppDrawerContext } from '../shared/context'
-
 
 export const AppRoutes = () => {
   const { setDrawerOptions } = useAppDrawerContext()
@@ -37,7 +36,6 @@ export const AppRoutes = () => {
   }, [setDrawerOptions])
   return (
     <Routes>
-      <Route path="/auth" element={<AuthPage />} />
       <Route path="/home" />
       <Route path="/user" element={<Usuarios />} />
       <Route path="/products" element={<Products />} />
