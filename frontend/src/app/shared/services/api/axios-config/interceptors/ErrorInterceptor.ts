@@ -5,8 +5,8 @@ export const errorInterceptor = (error: AxiosError) => {
   if (error.message === 'Network Error') {
     return Promise.reject(new Error('Erro de conexão'))
   }
-  if (error.response?.status === 400) {
-    return Promise.reject(new Error('Não foi possivel acessar a api'))
+  if (error.response?.status === 403) {
+    return Promise.reject(new Error('Token Invalido'))
   }
 
   return Promise.reject(error)

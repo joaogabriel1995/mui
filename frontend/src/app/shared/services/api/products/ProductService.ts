@@ -24,7 +24,7 @@ const getAllProducts = async (): Promise<TProduct | Error> => {
     }
     return new Error('Error aos listar produtos')
   } catch (error) {
-    console.error(error)
+    console.log(error)
     return new Error(
       (error as { message: string }).message || 'Error aos listar produtros'
     )

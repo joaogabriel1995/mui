@@ -20,7 +20,7 @@ export function ensureAuthenticated(
     verify(token, 'd4725c5b-fca7-44f4-b269-5c1f513983a5')
     return next()
   } catch (err) {
-    return response.status(401).json({
+    return response.status(403).json({
       message: 'Token invalid'
     })
   }

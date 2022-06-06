@@ -13,15 +13,13 @@ type TUsertowithtotalcount = {
 const getAll = async (filter = ''): Promise<TUsertowithtotalcount | Error> => {
   try {
     const urlRelative = `/user?name=${filter}`
-    const { data } = await Api.get(urlRelative)
+    const data = await Api.get(urlRelative)
     if (data) {
-      return {
-        data
-      }
+      return data
     }
     return new Error('Erro ao listar os registros')
   } catch (error) {
-    console.error(error)
+    console.log(error)
     return new Error(
       (error as { message: string }).message || 'Erro ao listar os registros'
     )

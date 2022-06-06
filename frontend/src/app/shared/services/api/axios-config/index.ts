@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { Enviroment } from '../../../environment'
 import { ResponseInterceptor } from './interceptors'
+import dayjs from 'dayjs'
 import jwt_decode from 'jwt-decode'
-import * as dayjs from 'dayjs'
+import { AuthService } from '../auth/AuthService'
 
 interface IUser {
   exp: number
@@ -21,45 +22,47 @@ const Api = axios.create({
 })
 
 Api.interceptors.request.use(async request => {
-  const acessToken = localStorage.getItem('APP_ACCESS_TOKEN')
-    ? localStorage.getItem('APP_ACCESS_TOKEN')
-    : null
+  try {
+    const acessToken = localStorage.getItem('APP_ACCESS_TOKEN')
+      ? localStorage.getItem('APP_ACCESS_TOKEN')
+      : null
 
-  const refreshToken = localStorage.getItem('REFRESH_TOKEN')
-    ? localStorage.getItem('REFRESH_TOKEN')
-    : null
-  if (!acessToken) {
+    if (!acessToken) {
+      return request
+    }
+    const user: IUser = jwt_decode(acessToken)
+    const ExpiresIn = dayjs().isAfter(dayjs.unix(user.exp))
+
+    request.headers = {
+      Authorization: `Bearer ${JSON.parse(acessToken)}`,
+      Accept: 'application/json'
+    }
+
     return request
+  } catch (error) {
+    console.log(error)
+    return new Error((error as { message: string }).message || 'Error refresh')
   }
-  const refreshTokenObject = JSON.parse(refreshToken)
-  console.log('Entrei Aqui')
-  request.headers = {
-    Authorization: `Bearer ${JSON.parse(acessToken)}`,
-    Accept: 'application/json'
-  }
-  const user: IUser = jwt_decode(acessToken)
-  const isExpired = dayjs.unix(user.exp).diff(dayjs()) < 1
-  if (!isExpired) {
-    console.log('Expirou', isExpired)
-    return request
-  }
-
-  const response = await Api.post('/refresh-token', {
-    refresh: refreshTokenObject.userId
-  })
-  console.log('data', response.data)
-  localStorage.setItem('APP_ACCESS_TOKEN', JSON.stringify(response.data))
-  request.headers = {
-    Authorization: `Bearer ${JSON.parse(acessToken)}`,
-    Accept: 'application/json'
-  }
-
-  return request
 })
 
 Api.interceptors.response.use(
-  response => ResponseInterceptor(response),
-  error => ResponseInterceptor(error)
+  response => {
+    return response
+  },
+  async error => {
+    try {
+      const status = error.response ? error.response.status : null
+      const prevRequest = error.config
+      if (status === 403) {
+        const refreshToken = JSON.parse(localStorage.getItem('REFRESH_TOKEN'))
+
+        console.log('refresh: ', refreshToken)
+        const Newtoken = await AuthService.refreshToken(refreshToken.id)
+        localStorage.setItem('APP_ACCESS_TOKEN', JSON.stringify(Newtoken))
+        return Api(prevRequest)
+      }
+    } catch (error) {}
+  }
 )
 
 export { Api }

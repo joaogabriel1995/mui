@@ -14,7 +14,7 @@ export const Usuarios = () => {
   const { debounce } = useDeBounce()
 
   const [rows, setRows] = useState<IListUser[]>([])
-  const columns_name = ['Id', 'Nome', 'Email', 'CPF']
+  const columns_name = ['Id', 'Nome', 'Email', 'CPF', 'PASSWORD']
   const [isLoading, setIsLoading] = useState(true)
   const busca = useMemo(() => {
     return searchParams.get('name') || ''
