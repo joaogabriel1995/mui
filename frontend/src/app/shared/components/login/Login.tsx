@@ -49,7 +49,7 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
         })
       })
 
-    const data = await AuthService.auth(email, password)
+    await AuthService.auth(email, password)
   }, [email, password])
 
   if (isAuthenticated) {

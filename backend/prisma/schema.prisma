@@ -13,18 +13,14 @@ datasource db {
 }
 
 model User {
-  id       String    @id @default(uuid())
-  name     String
-  email    String    @unique
-  cpf      String?
-  password String
-  products Product[]
-
-
-
-
-
+  id           String         @id @default(uuid())
+  name         String
+  email        String         @unique
+  cpf          String?
+  password     String
+  products     Product[]
   RefreshToken RefreshToken[]
+
   @@map("users")
 }
 

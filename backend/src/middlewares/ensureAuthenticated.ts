@@ -7,17 +7,21 @@ export function ensureAuthenticated(
   next: NextFunction
 ) {
   const authToken = request.headers.authorization
-  console.log('Aqui ', authToken)
 
   if (!authToken) {
-    console.log('Aqui  !authToken', authToken)
+    console.log(
+      'Arquivo: ensureAuthenticated, info: Token in missing',
+      authToken
+    )
     return response.status(401).json({
       message: 'Token in missing'
     })
   }
+  console.log(' authToken', authToken)
   const [, token] = authToken.split(' ')
+  console.log('Arquivo: ensureAuthenticated, info: Token ', token)
   try {
-    verify(token, 'd4725c5b-fca7-44f4-b269-5c1f513983a5')
+    console.log(verify(token, 'd4725c5b-fca7-44f4-b269-5c1f513983a5'))
     return next()
   } catch (err) {
     return response.status(403).json({

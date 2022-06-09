@@ -10,12 +10,12 @@ class AuthenticateUserController {
   async handle(request: Request, response: Response) {
     const { email, password } = request.body
     try {
-      const { token, refreshToken } =
+      const { acessToken, refreshToken } =
         await this.authenticateUserUseCase.execute({
           email,
           password
         })
-      return response.status(200).json({ token, refreshToken })
+      return response.status(200).json({ acessToken, refreshToken })
     } catch (err) {
       return response.status(400).json('Erro')
     }

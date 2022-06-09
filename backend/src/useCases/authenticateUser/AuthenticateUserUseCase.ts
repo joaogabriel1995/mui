@@ -1,4 +1,5 @@
 import { compare } from 'bcryptjs'
+import { prisma } from '../../prisma/client'
 import { GenerateRefreshToken } from '../../provider/implementations/GenerateRefreshToken'
 import { GenerateTokenProvider } from '../../provider/implementations/GenereteTokenProvider'
 import { IAuthenticateUserRepository } from '../../repositories/IAuthenticateUserRepository'
@@ -29,12 +30,16 @@ class AuthenticateUserUseCase {
     if (!passwordMatch) {
       throw new Error('User or password incorrect')
     }
-    const token = await this.generateTokenProvider.execute(userAlreadyExists.id)
+    
+
+    const acessToken = await this.generateTokenProvider.execute(
+      userAlreadyExists.id
+    )
     const refreshToken = await this.generateRefreshToken.execute(
       userAlreadyExists.id
     )
-    console.log(token, refreshToken)
-    return { token, refreshToken }
+    console.log(acessToken, refreshToken)
+    return { acessToken, refreshToken }
   }
 }
 

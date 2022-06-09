@@ -25,6 +25,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const acessToken = localStorage.getItem('APP_ACCESS_TOKEN')
+    const refreshToken = localStorage.getItem('REFRESH_TOKEN')
 
     console.log('useEffect', acessToken)
 
@@ -36,27 +37,28 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
   }, [])
 
   const handleLogin = useCallback(async (email: string, password: string) => {
-    const result = await AuthService.auth(email, password)
-    if (result instanceof Error) {
-      return result.message
+    const auth = await AuthService.auth(email, password)
+    if (auth instanceof Error) {
+      return auth.message
     } else {
-      console.log('APP_ACCESS_TOKEN ', result.acessToken)
-      localStorage.setItem(
-        'APP_ACCESS_TOKEN',
-        JSON.stringify(result.acessToken)
-      )
-      localStorage.setItem('REFRESH_TOKEN', JSON.stringify(result.refreshToken))
+      console.log('APP_ACCESS_TOKEN ', auth.acess_token)
+      localStorage.setItem('APP_ACCESS_TOKEN', auth.acess_token)
+      localStorage.setItem('REFRESH_TOKEN', JSON.stringify(auth.refresh_token))
 
-      setAcessToken(result.acessToken)
-      setRefreshToken(result.refreshToken)
+      setRefreshToken(auth.refresh_token)
+      setAcessToken(auth.acess_token)
     }
   }, [])
   const handleLogout = useCallback(() => {
     localStorage.removeItem('APP_ACCESS_TOKEN')
+    localStorage.removeItem('REFRESH_TOKEN')
+    setRefreshToken(undefined)
+
     setAcessToken(undefined)
   }, [])
 
   const isAuthenticated = useMemo(() => !!acessToken, [acessToken])
+  console.log(isAuthenticated)
 
   return (
     <AuthContext.Provider

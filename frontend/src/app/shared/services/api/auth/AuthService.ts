@@ -1,8 +1,8 @@
 import { Api } from '../axios-config'
 
 export interface IAuth {
-  acessToken: string
-  refreshToken: string
+  acess_token: string
+  refresh_token: string
 }
 
 export interface IRefresh {
@@ -14,9 +14,13 @@ const auth = async (
   password: string
 ): Promise<IAuth | Error> => {
   try {
-    const { data } = await Api.post('/login', { email, password })
+    const { data } = await Api.post('/login', {
+      email,
+      password
+    })
+    console.log('Arquivo:authService', data.refreshToken)
     if (data) {
-      return { acessToken: data.token, refreshToken: data.refreshToken }
+      return { acess_token: data.acessToken, refresh_token: data.refreshToken }
     }
     return new Error('Error no Login')
   } catch (error) {
@@ -27,11 +31,11 @@ const auth = async (
 
 const refreshToken = async (id: string): Promise<IRefresh | Error> => {
   try {
-    const response = await Api.post('/refresh-token', {
+    const { data } = await Api.post('/refresh-token', {
       refresh_token: id
     })
-    if (response.data) {
-      return response.data.token
+    if (data) {
+      return data.token
     }
   } catch (error) {
     console.log(error)

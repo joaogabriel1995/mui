@@ -1,21 +1,18 @@
 import axios from 'axios'
 import { Enviroment } from '../../../environment'
-import { ResponseInterceptor } from './interceptors'
-import dayjs from 'dayjs'
-import jwt_decode from 'jwt-decode'
 import { AuthService } from '../auth/AuthService'
 
-interface IUser {
-  exp: number
-  iat: number
-  sub: string
-}
+// interface IUser {
+//   exp: number
+//   iat: number
+//   sub: string
+// }
 
-interface IRefresh {
-  expiresIn: number
-  id: number
-  userId: string
-}
+// interface IRefresh {
+//   expiresIn: number
+//   id: number
+//   userId: string
+// }
 
 const Api = axios.create({
   baseURL: Enviroment.URL_BASE
@@ -30,11 +27,11 @@ Api.interceptors.request.use(async request => {
     if (!acessToken) {
       return request
     }
-    const user: IUser = jwt_decode(acessToken)
-    const ExpiresIn = dayjs().isAfter(dayjs.unix(user.exp))
+    // const user: IUser = jwt_decode(acessToken)
+    // const ExpiresIn = dayjs().isAfter(dayjs.unix(user.exp))
 
     request.headers = {
-      Authorization: `Bearer ${JSON.parse(acessToken)}`,
+      Authorization: `Bearer ${acessToken}`,
       Accept: 'application/json'
     }
 
@@ -57,11 +54,12 @@ Api.interceptors.response.use(
         const refreshToken = JSON.parse(localStorage.getItem('REFRESH_TOKEN'))
 
         console.log('refresh: ', refreshToken)
-        const Newtoken = await AuthService.refreshToken(refreshToken.id)
-        localStorage.setItem('APP_ACCESS_TOKEN', JSON.stringify(Newtoken))
+        const token = await AuthService.refreshToken(refreshToken.id)
+
+        localStorage.setItem('APP_ACCESS_TOKEN', token)
         return Api(prevRequest)
       }
-    } catch (error) {}
+    } catch (Error) {}
   }
 )
 
