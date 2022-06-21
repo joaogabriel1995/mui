@@ -4,7 +4,7 @@ export interface IListProduct {
   id: string
   name: string
   costPrice: string
-  imposto: string
+  taxation: string
   sku: string
   created_at: string
   userId: number
@@ -14,9 +14,10 @@ type TProduct = {
   data: IListProduct[]
 }
 
-const getAllProducts = async (): Promise<TProduct | Error> => {
+const getAllProducts = async (currentPage = ''): Promise<TProduct | Error> => {
   try {
-    const { data } = await Api.get('/products')
+    const urlRelative = `/products?&page=${currentPage}`
+    const { data } = await Api.get(urlRelative)
     if (data) {
       return {
         data
@@ -31,6 +32,20 @@ const getAllProducts = async (): Promise<TProduct | Error> => {
   }
 }
 
+const deleteProduct = async (id: string): Promise<IListProduct | Error> => {
+  try {
+    const urlRelative = `/product/?del=${id}`
+    console.log(urlRelative)
+    const { data } = await Api.delete(urlRelative)
+    return data
+  } catch (error) {
+    return new Error(
+      (error as { message: string }).message || 'Error ao delear produtros'
+    )
+  }
+}
+
 export const ProducService = {
-  getAllProducts
+  getAllProducts,
+  deleteProduct
 }

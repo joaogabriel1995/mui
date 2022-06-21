@@ -30,7 +30,6 @@ class AuthenticateUserUseCase {
     if (!passwordMatch) {
       throw new Error('User or password incorrect')
     }
-    
 
     const acessToken = await this.generateTokenProvider.execute(
       userAlreadyExists.id

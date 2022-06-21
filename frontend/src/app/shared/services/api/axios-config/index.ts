@@ -56,7 +56,7 @@ Api.interceptors.response.use(
         console.log('refresh: ', refreshToken)
         const token = await AuthService.refreshToken(refreshToken.id)
 
-        localStorage.setItem('APP_ACCESS_TOKEN', token)
+        localStorage.setItem('APP_ACCESS_TOKEN', JSON.stringify(token))
         return Api(prevRequest)
       }
     } catch (Error) {}

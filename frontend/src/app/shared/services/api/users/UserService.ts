@@ -7,16 +7,20 @@ export interface IListUser {
   cpf: string
 }
 type TUsertowithtotalcount = {
-  data: IListUser[]
+  ListUser: IListUser[]
 }
 
-const getAll = async (filter = ''): Promise<TUsertowithtotalcount | Error> => {
+const getAll = async (
+  filter = '',
+  currentPage = ''
+): Promise<TUsertowithtotalcount | Error> => {
   try {
-    const urlRelative = `/user?name=${filter}`
-    const data = await Api.get(urlRelative)
+    const urlRelative = `/user?name=${filter}&page=${currentPage}`
+    console.log(urlRelative)
+    const { data } = await Api.get(urlRelative)
     console.log(data)
     if (data) {
-      return data
+      return { ListUser: data }
     }
     return new Error('Erro ao listar os registros')
   } catch (error) {
