@@ -15,6 +15,7 @@ import { ensureAuthenticated } from '../middlewares/ensureAuthenticated'
 import { refreshTokenUserControler } from '../useCases/refreshTokenUser'
 import { createProductController } from '../useCases/createProduct/index'
 import { deleteProductController } from '../useCases/deleteProduct'
+import { findProductByIdController } from '../useCases/findProductById'
 
 const updateUserController = new UpdateUserController()
 const deleteUserController = new DeleteUserController()
@@ -43,12 +44,17 @@ appRouter.delete('/user/del=:id', deleteUserController.handle)
 appRouter.post('/product', (request, response) =>
   createProductController.handle(request, response)
 )
-appRouter.get('/products', (request, response) =>
+appRouter.get('/products/', (request, response) =>
   findManyProductController.handle(request, response)
 )
+
+appRouter.get('/products/:id', (request, response) =>
+  findProductByIdController.handle(request, response)
+)
+
 appRouter.delete('/product', (request, response) =>
   deleteProductController.handle(request, response)
 )
-appRouter.patch('/product', updateProductController.handle)
+appRouter.patch('/product/id', updateProductController.handle)
 
 export { appRouter }

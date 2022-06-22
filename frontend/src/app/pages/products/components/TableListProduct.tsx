@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import { Fragment } from 'react'
 import { IListProduct } from '../../../shared/services/api'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditSharpIcon from '@mui/icons-material/EditSharp'
 interface ITableListagem {
@@ -30,6 +30,7 @@ export const TableListProduct: React.FC<ITableListagem> = ({
   handleDelete
 }) => {
   const [searchParams, setSearchParams] = useSearchParams()
+  const navegate = useNavigate()
 
   return (
     <Fragment>
@@ -56,14 +57,17 @@ export const TableListProduct: React.FC<ITableListagem> = ({
                       onClick={() => handleDelete(row.id)}
                     />
                   </IconButton>
-                  <IconButton size="small">
+                  <IconButton
+                    size="small"
+                    onClick={() => navegate(`/product/${row.id}`)}
+                  >
                     <EditSharpIcon fontSize="small" />
                   </IconButton>{' '}
                 </TableCell>
                 <TableCell>{row.name} </TableCell>
                 <TableCell>{row.costPrice}</TableCell>
                 <TableCell>{row.taxation}</TableCell>
-                <TableCell>{row.costPrice}</TableCell>
+                <TableCell>{row.sku}</TableCell>
               </TableRow>
             ))}
           </TableBody>

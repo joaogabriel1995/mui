@@ -46,9 +46,9 @@ export const FerramentasDelistagem: React.FC<IFerramentasDelistagem> = ({
       <Button
         variant="contained"
         disableElevation
+        onClick={onClickSearch}
         color={themeName === 'light' ? 'secondary' : 'primary'}
-        endIcon={<Icon> searchIcon </Icon>}
-        onChange={() => onClickSearch()}
+        endIcon={<Icon> addIcon </Icon>}
       >
         {labelButton}
       </Button>

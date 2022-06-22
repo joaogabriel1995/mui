@@ -43,12 +43,8 @@ export const Usuarios = () => {
     })
   }, [busca, page])
 
-
-  
-
   return (
     <LayoutBaseDePagina
-      ferramentaDeDetalhes={<FerramentasDeDetalhe></FerramentasDeDetalhe>}
       titulo="Listagem de usuários"
       ferramentaDeListagem={
         <FerramentasDelistagem

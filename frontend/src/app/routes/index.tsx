@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router'
-import { Usuarios, Products } from '../pages'
+import { Usuarios, Products, NewProductorUpdate } from '../pages'
 import { useAppDrawerContext } from '../shared/context'
 
 export const AppRoutes = () => {
@@ -38,7 +38,9 @@ export const AppRoutes = () => {
     <Routes>
       <Route path="/home" />
       <Route path="/user" element={<Usuarios />} />
-      <Route path="/products" element={<Products />} />
+      <Route path="/products/" element={<Products />} />
+      <Route path="/product/:id" element={<NewProductorUpdate />} />
+
       <Route path="/ad" />
       <Route path="/statistics" />
       <Route path="*" element={<Navigate to="/home" />} />

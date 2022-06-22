@@ -1,14 +1,18 @@
-import { FerramentasDeDetalhe } from '../../shared/components'
+import {
+  FerramentasDeDetalhe,
+  FerramentasDelistagem
+} from '../../shared/components'
 import { LayoutBaseDePagina } from '../../shared/layouts'
 import { TableListProduct } from './components/TableListProduct'
 import { IListProduct, ProducService } from '../../shared/services/api'
 import { useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 export const Products = () => {
   const columns_name = ['Ações', 'Nome', 'Preço de Custo', 'Imposto', 'sku']
   const [rows, setRows] = useState<IListProduct[]>([])
   const [searchParams, setSearchParams] = useSearchParams()
+  const navegate = useNavigate()
 
   const page = useMemo(() => {
     return Number(searchParams.get('page') || '1')
@@ -44,7 +48,12 @@ export const Products = () => {
   return (
     <LayoutBaseDePagina
       titulo="Produtos Cadastrados"
-      ferramentaDeDetalhes={<FerramentasDeDetalhe></FerramentasDeDetalhe>}
+      ferramentaDeListagem={
+        <FerramentasDelistagem
+          labelButton="Novo"
+          onClickSearch={() => navegate('/product/new')}
+        ></FerramentasDelistagem>
+      }
     >
       <TableListProduct
         page={page}

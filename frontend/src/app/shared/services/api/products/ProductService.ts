@@ -45,7 +45,20 @@ const deleteProduct = async (id: string): Promise<IListProduct | Error> => {
   }
 }
 
+const getProductById = async (id: string): Promise<IListProduct | Error> => {
+  try {
+    const urlRelative = `/products/${id}`
+    const { data } = await Api.get(urlRelative)
+    return data
+  } catch (error) {
+    return new Error(
+      (error as { message: string }).message || 'Error ao listar produto'
+    )
+  }
+}
+
 export const ProducService = {
   getAllProducts,
-  deleteProduct
+  deleteProduct,
+  getProductById
 }
