@@ -24,7 +24,7 @@ const auth = async (
     }
     return new Error('Error no Login')
   } catch (error) {
-    console.log(error)
+    //console.log(error)
     return new Error((error as { message: string }).message || 'Error no Login')
   }
 }

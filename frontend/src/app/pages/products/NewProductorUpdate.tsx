@@ -1,17 +1,26 @@
-import { LinearProgress } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { Button, LinearProgress } from '@mui/material'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FerramentasDeDetalhe } from '../../shared/components'
 import { LayoutBaseDePagina } from '../../shared/layouts'
-import { ProducService } from '../../shared/services/api'
+import { IServiceProduct, ProducService } from '../../shared/services/api'
 import { Form } from '@unform/web'
 import { VTextField } from '../../shared/forms'
+import { FormHandles } from '@unform/core'
+
+interface product {
+  ProductName: string
+  ProductCostPrice: number
+  ProductTaxation: number
+  ProductSku: string
+}
 
 export const NewProductorUpdate: React.FC = () => {
   const { id = 'new' } = useParams<'id'>()
   const [title, setTitle] = useState<string>('')
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
+  const formRef = useRef<FormHandles>(null)
 
   const handleDelete = (id: string) => {
     if (window.confirm('Realmente deseja apagar?')) {
@@ -24,6 +33,17 @@ export const NewProductorUpdate: React.FC = () => {
         }
       })
     }
+  }
+
+  const handleSalve = (data: product) => {
+    const { ProductName, ProductCostPrice, ProductTaxation, ProductSku } = data
+    console.log(ProductName, ProductCostPrice, ProductTaxation, ProductSku)
+    ProducService.createProduct(
+      ProductName,
+      ProductCostPrice,
+      ProductTaxation,
+      ProductSku
+    ).then(response => console.log(response.name))
   }
 
   useEffect(() => {
@@ -42,7 +62,7 @@ export const NewProductorUpdate: React.FC = () => {
       })
       setTitle('Editar Produto')
     }
-  }, [id])
+  }, [id, navigate])
   return (
     <LayoutBaseDePagina
       titulo={title}
@@ -56,6 +76,7 @@ export const NewProductorUpdate: React.FC = () => {
             navigate('/product/new')
           }}
           onClickSave={() => {
+            formRef.current?.submitForm()
             navigate('/products')
           }}
           onClickDel={() => handleDelete(id)}
@@ -63,9 +84,19 @@ export const NewProductorUpdate: React.FC = () => {
       }
     >
       {isLoading && <LinearProgress variant="indeterminate" />}
-      <Form onSubmit={dados => console.log(dados)}>
-        <VTextField name="ProductName"></VTextField>
-        <button type="submit">Submit</button>
+      <Form ref={formRef} onSubmit={handleSalve}>
+        <VTextField placeholder="Nome" name="ProductName"></VTextField>
+        <VTextField
+          placeholder="Preço De Custo"
+          name="ProductCostPrice"
+        ></VTextField>
+        <VTextField placeholder="Imposto" name="ProductTaxation"></VTextField>
+        <VTextField placeholder="SKU" name="ProductSku"></VTextField>
+
+        <Button type="submit" variant="contained" color="secondary">
+          {' '}
+          Cadastrar{' '}
+        </Button>
       </Form>
     </LayoutBaseDePagina>
   )
